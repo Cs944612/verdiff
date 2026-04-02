@@ -1,4 +1,8 @@
 #!/bin/sh
 set -eu
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if [ ! -x "$script_dir/build/bin/verdiff" ]; then
+    echo "verdiff: build/bin/verdiff not found. Run 'make' first." >&2
+    exit 1
+fi
 exec "$script_dir/build/bin/verdiff" "$@"

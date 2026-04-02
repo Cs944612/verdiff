@@ -8,6 +8,7 @@ DOCDIR ?= $(PREFIX)/share/doc/verdiff
 BUILD_DIR ?= build
 OBJDIR := $(BUILD_DIR)/obj
 BIN_DIR := $(BUILD_DIR)/bin
+INSTALL ?= install
 
 TARGET := verdiff
 SRC := \
@@ -51,11 +52,12 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 install: $(TARGET_PATH)
-	mkdir -p $(DESTDIR)$(BINDIR)
-	mkdir -p $(DESTDIR)$(DOCDIR)
-	cp $(TARGET_PATH) $(DESTDIR)$(BINDIR)/$(TARGET)
-	cp README.md $(DESTDIR)$(DOCDIR)/README.md
-	cp third_party/xxhash/LICENSE $(DESTDIR)$(DOCDIR)/THIRD_PARTY_XXHASH_LICENSE
+	$(INSTALL) -d $(DESTDIR)$(BINDIR)
+	$(INSTALL) -d $(DESTDIR)$(DOCDIR)
+	$(INSTALL) -m 755 $(TARGET_PATH) $(DESTDIR)$(BINDIR)/$(TARGET)
+	$(INSTALL) -m 644 README.md $(DESTDIR)$(DOCDIR)/README.md
+	$(INSTALL) -m 644 LICENSE $(DESTDIR)$(DOCDIR)/LICENSE
+	$(INSTALL) -m 644 third_party/xxhash/LICENSE $(DESTDIR)$(DOCDIR)/THIRD_PARTY_XXHASH_LICENSE
 
 uninstall:
 	rm -f $(DESTDIR)$(BINDIR)/$(TARGET)

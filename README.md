@@ -32,6 +32,13 @@ Verdiff is designed for fast, accurate comparison of large directory trees with 
 make
 ```
 
+After `make`, run it directly from the repository root:
+
+```sh
+./verdiff /path/to/source /path/to/target
+./verdiff --thread 8 --lines /path/to/source /path/to/target
+```
+
 ## Test
 
 ```sh
@@ -59,7 +66,7 @@ sh bench/run_benchmark.sh 20000
 ## Install
 
 ```sh
-make install PREFIX=/usr/local
+sudo make install PREFIX=/usr/local
 ```
 
 Run from anywhere after install:
@@ -68,11 +75,17 @@ Run from anywhere after install:
 verdiff --thread 8 --lines /path/to/source /path/to/target
 ```
 
+To remove the installed binary and docs:
+
+```sh
+sudo make uninstall PREFIX=/usr/local
+```
+
 ## Usage
 
 ```sh
-./build/bin/verdiff --thread 8 --lines DIR_A DIR_B
-./build/bin/verdiff DIR_A DIR_B
+./verdiff --thread 8 --lines DIR_A DIR_B
+./verdiff DIR_A DIR_B
 ```
 
 Stdout prints only the summary.
