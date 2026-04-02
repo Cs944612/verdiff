@@ -4,6 +4,12 @@
 #include "common.h"
 #include "progress.h"
 
+/*
+ * CompareContext is basically the global playbook for our threads.
+ * Contains read-only references to configurations, the thread-safe work queue, 
+ * the thread-safe result set, and a mutex to securely record the FIRST catastrophic 
+ * error we encountered (because realistically, we're only interested in the first one).
+ */
 struct CompareContext {
     const Config *config;
     const FileIndex *index_a;
@@ -15,12 +21,24 @@ struct CompareContext {
     int first_error;
 };
 
+/* 
+ * ThreadPool:
+ * A bounded squad of reliable POSIX threads. We spawn 'thread_count' of them, 
+ * point them at `worker_main()`, and lazily watch the CPUs catch fire as they gorge 
+ * themselves on identical CompareTasks.
+ */
 typedef struct {
     pthread_t *threads;
     size_t thread_count;
     CompareContext *context;
 } ThreadPool;
 
+/*
+ * Queue primitives. 
+ * Warning: Under heavy load, push/pop block aggressively on conditional variables.
+ * task_queue_shutdown() broadcasts an absolute "everybody go home right now" 
+ * signal capable of shaking blocked threads out of their slumber.
+ */
 int task_queue_init(TaskQueue *queue, size_t capacity);
 void task_queue_destroy(TaskQueue *queue);
 int task_queue_push(TaskQueue *queue, CompareTask task);

@@ -130,6 +130,12 @@ int compare_context_get_error(CompareContext *context) {
     return error_code;
 }
 
+/*
+ * worker_main: The existential loop of our threads.
+ * Wake up, grab a file, hash it, compare it, and if something goes terribly 
+ * wrong (like EPERM), scream loudly by slamming the emergency shutdown button 
+ * on the queue so the whole program can halt gracefully.
+ */
 static void *worker_main(void *arg) {
     CompareContext *context = arg;
     CompareTask task;

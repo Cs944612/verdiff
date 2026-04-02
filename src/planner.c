@@ -24,6 +24,13 @@ static int push_presence_record(ResultSet *results, const char *path, ChangeType
     return result_set_push(results, &record);
 }
 
+/*
+ * plan_and_compare: The Grand Synthesizer.
+ * We spin up the worker threads, then we just dump every overlapping file into 
+ * the TaskQueue. While they crunch the heavy lifting (hashes and byte comparisons), 
+ * we casually fast-path track the uniquely added/removed files on the main thread 
+ * using our trusty hash maps. Extremely managerial.
+ */
 int plan_and_compare(const Config *config, const FileIndex *index_a, const FileIndex *index_b, ResultSet *results, ProgressState *progress) {
     CompareContext context = {
         .config = config,

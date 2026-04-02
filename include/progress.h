@@ -3,6 +3,10 @@
 
 #include "common.h"
 
+/*
+ * ProgressPhase: Tells the poor soul staring at their terminal 
+ * which part of the multi-threaded beast is currently crushing their CPU.
+ */
 typedef enum {
     PROGRESS_PHASE_IDLE = 0,
     PROGRESS_PHASE_SCAN_A = 1,

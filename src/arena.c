@@ -36,6 +36,14 @@ static ArenaChunk *arena_alloc_chunk(StringArena *arena, size_t min_size) {
     return chunk;
 }
 
+/*
+ * string_arena_copy:
+ * The absolute fastest way to "allocate" a string. We check if it fits in the 
+ * current continuous heap chunk. If yes, blindly bump the pointer forward. 
+ * If no, fetch a massive new chunk from the OS, tack it onto our linked list, 
+ * and then bump the pointer. No free() calls required until the apocalypse 
+ * (program exit).
+ */
 const char *string_arena_copy(StringArena *arena, const char *value) {
     size_t len = strlen(value) + 1U;
     ArenaChunk *chunk = arena->head;

@@ -10,8 +10,15 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+/*
+ * hash_file_mmap: The "I am speed" path.
+ * If a file is small enough that we don't care about memory pressure, 
+ * we just mmap the whole thing directly into our address space and feed 
+ * the raw pointer to XXH3. No read() loops, no buffer passing, pure speed.
+ */
 static int hash_file_mmap(int fd, off_t size, uint64_t *hash_out) {
     if (size == 0) {
+        /* Hashing empty files is philosophically ambiguous, but mathematically zeroes. */
         *hash_out = XXH3_64bits(NULL, 0);
         return 0;
     }
@@ -26,6 +33,12 @@ static int hash_file_mmap(int fd, off_t size, uint64_t *hash_out) {
     return 0;
 }
 
+/*
+ * hash_file_stream: The safety net. 
+ * Used when a file is too gigabytian for mmap, or when mmap fails because of 
+ * a weird networked filesystem that hates memory-mapped IO.
+ * We manually read() chunks into a heap buffer and progressively hash them.
+ */
 static int hash_file_stream(int fd, size_t buffer_size, uint64_t *hash_out) {
     XXH3_state_t *state = XXH3_createState();
     if (state == NULL) {
@@ -150,6 +163,13 @@ int vd_compare_binary_files(const char *path_a, const char *path_b, size_t buffe
     return rc;
 }
 
+/*
+ * vd_is_likely_text_file: The heuristic text recognizer.
+ * Reads the first 8KB of a file, checking for Null bytes or weird non-printable
+ * characters. If it finds one, it immediately flags it as binary. Sure, it 
+ * might be wrong about exotic encodings, but for most sane engineering usecases 
+ * this works like a charm.
+ */
 bool vd_is_likely_text_file(const char *path) {
     int fd = open(path, O_RDONLY);
     if (fd < 0) {

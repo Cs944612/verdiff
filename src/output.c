@@ -154,6 +154,13 @@ static int write_record_row(size_t record_index, void *user_data) {
     ) < 0 ? -1 : 0;
 }
 
+/*
+ * write_detailed_diff:
+ * Takes our carefully aggregated line-by-line mismatch data and formats it 
+ * vertically so humans don't have to squint. It even trims and centers text using
+ * our specialized string clippers. If you find yourself reading this output, 
+ * someone definitely broke the build.
+ */
 static int write_detailed_diff(size_t record_index, void *user_data) {
     OutputTraversal *state = user_data;
     const ChangeRecord *record = &state->results->items[record_index];

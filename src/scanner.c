@@ -47,6 +47,13 @@ static bool frame_stack_pop(FrameStack *stack, ScanFrame *frame_out) {
     return true;
 }
 
+/*
+ * scan_directory
+ * Uses an explicit heap queue (FrameStack) to traverse the directory natively.
+ * We do this so the program doesn't explode via stack overflow when somebody 
+ * nests 1,000 folders deep because they thought Java package structures should 
+ * exactly mirror their corporate org chart.
+ */
 int scan_directory(const char *root, FileIndex *index, ProgressState *progress, ProgressPhase phase) {
     FrameStack stack = {0};
     int rc = 0;

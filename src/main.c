@@ -24,6 +24,13 @@ static size_t default_thread_count(void) {
     return (size_t)online;
 }
 
+/*
+ * main: The Grand Orchestrator.
+ * Parses your terribly formatted command-line arguments, provisions the index maps, 
+ * orchestrates the fancy ANSI progress updates, kicks off the thread pools, 
+ * retrieves the verdicts, and cleanly writes out the final aggregated report
+ * before gracefully bowing out.
+ */
 int main(int argc, char **argv) {
     Config config = {
         .thread_count = default_thread_count(),

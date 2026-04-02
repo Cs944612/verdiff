@@ -28,6 +28,12 @@ static size_t probe_index(uint64_t hash, size_t capacity) {
     return (size_t)(hash & (uint64_t)(capacity - 1U));
 }
 
+/*
+ * file_index_rehash:
+ * When the neighborhood gets too crowded (>70% load factor), we build a brand 
+ * new universe physically twice as large and migrate everybody over. 
+ * This prevents our beloved linear probing from degrading into O(N) sadness.
+ */
 static int file_index_rehash(FileIndex *index, size_t new_capacity) {
     IndexSlot *old_slots = index->slots;
     size_t old_capacity = index->capacity;

@@ -3,6 +3,12 @@
 
 #include "common.h"
 
+/*
+ * PathTreeNode: A humble node in our bespoke AVL tree.
+ * Why build an AVL tree from scratch? Because qsort()-ing an array of string 
+ * paths across concurrent threads is ugly, and building an ordered tree live 
+ * guarantees we can dump the report alphabetically without pausing at the end.
+ */
 struct PathTreeNode {
     size_t record_index;
     int height;
