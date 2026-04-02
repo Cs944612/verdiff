@@ -31,15 +31,15 @@ echo "  Removed files        : 1"
 echo
 
 if command -v /usr/bin/time >/dev/null 2>&1; then
-    /usr/bin/time -f 'Elapsed Seconds: %e\nMax RSS KB: %M' ./build/bin/verdiff --lines --skip-unchanged "$a" "$b" > "$tmpdir/report.txt"
+    /usr/bin/time -f 'Elapsed Seconds: %e\nMax RSS KB: %M' ./build/bin/verdiff --lines --skip-unchanged -o "$tmpdir/detailed.txt" "$a" "$b" > "$tmpdir/report.txt"
 else
-    ./build/bin/verdiff --lines --skip-unchanged "$a" "$b" > "$tmpdir/report.txt"
+    ./build/bin/verdiff --lines --skip-unchanged -o "$tmpdir/detailed.txt" "$a" "$b" > "$tmpdir/report.txt"
 fi
 
 grep -F "Modified Files        : 2" "$tmpdir/report.txt" >/dev/null
 grep -F "Added Files           : 1" "$tmpdir/report.txt" >/dev/null
 grep -F "Removed Files         : 1" "$tmpdir/report.txt" >/dev/null
-grep -F "File: src/hot.c" "$tmpdir/report.txt" >/dev/null
+grep -F "File: src/hot.c" "$tmpdir/detailed.txt" >/dev/null
 
 echo
 echo "Correctness checks passed."

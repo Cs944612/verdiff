@@ -115,8 +115,24 @@ int compare_candidate_file(const CompareContext *context, const char *relative_p
         return ENOMEM;
     }
 
+    uint64_t hash_a = 0;
+    uint64_t hash_b = 0;
+    int rc = hash_file_xxh3(path_a, context->config->hash_buffer_size, context->config->mmap_threshold, &hash_a);
+    if (rc == 0) {
+        rc = hash_file_xxh3(path_b, context->config->hash_buffer_size, context->config->mmap_threshold, &hash_b);
+    }
+
     bool equal = false;
-    int rc = vd_compare_binary_files(path_a, path_b, context->config->hash_buffer_size, &equal);
+    if (rc == 0) {
+        if (hash_a != hash_b) {
+            equal = false;
+        } else if (context->config->verify_equal_hashes) {
+            rc = vd_compare_binary_files(path_a, path_b, context->config->hash_buffer_size, &equal);
+        } else {
+            equal = true;
+        }
+    }
+
     if (rc == 0 && equal) {
         if (context->config->include_unchanged) {
             rc = push_simple_record(context->results, relative_path, CHANGE_UNCHANGED, DETAIL_NONE, info_a->size, info_b->size);
