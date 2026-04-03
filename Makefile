@@ -1,6 +1,7 @@
 CC ?= cc
 CFLAGS ?= -O3 -DNDEBUG -std=c11 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -pthread
-CPPFLAGS ?= -Iinclude -Ithird_party/xxhash -D_POSIX_C_SOURCE=200809L
+VERSION ?= 0.1.0
+CPPFLAGS ?= -Iinclude -Ithird_party/xxhash -D_POSIX_C_SOURCE=200809L -DVERDIFF_VERSION=\"$(VERSION)\"
 LDFLAGS ?= -pthread
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin

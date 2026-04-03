@@ -14,6 +14,11 @@ static const char *default_report_path = "verdiff_report.txt";
 
 static void usage(FILE *stream) {
     fprintf(stream, "Usage: verdiff [--thread N|--threads N|-j N] [--lines] [--skip-unchanged] [-o file] DIR_A DIR_B\n");
+    fprintf(stream, "       verdiff [--help] [--version]\n");
+}
+
+static void print_version(FILE *stream) {
+    fprintf(stream, "verdiff %s\n", VERDIFF_VERSION);
 }
 
 static size_t default_thread_count(void) {
@@ -43,6 +48,16 @@ int main(int argc, char **argv) {
 
     int argi = 1;
     while (argi < argc) {
+        if (strcmp(argv[argi], "--help") == 0 ||
+            strcmp(argv[argi], "-h") == 0) {
+            usage(stdout);
+            return 0;
+        }
+        if (strcmp(argv[argi], "--version") == 0 ||
+            strcmp(argv[argi], "-V") == 0) {
+            print_version(stdout);
+            return 0;
+        }
         if (strcmp(argv[argi], "--lines") == 0) {
             config.include_lines = true;
             argi++;

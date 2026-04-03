@@ -86,6 +86,8 @@ sudo make uninstall PREFIX=/usr/local
 ```sh
 ./verdiff --thread 8 --lines DIR_A DIR_B
 ./verdiff DIR_A DIR_B
+./verdiff --help
+./verdiff --version
 ```
 
 Stdout prints only the summary.
