@@ -3,6 +3,10 @@
 `verdiff` is a high-performance C directory comparison engine for large trees and codebases.
 
 [![CI](https://github.com/Cs944612/verdiff/actions/workflows/ci.yml/badge.svg)](https://github.com/Cs944612/verdiff/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Cs944612/verdiff)](https://github.com/Cs944612/verdiff/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Language: C](https://img.shields.io/badge/Language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
+[![Platform: Linux](https://img.shields.io/badge/Platform-Linux-orange.svg)](https://www.linux.org/)
 
 Verdiff is designed for fast, accurate comparison of large directory trees with a metadata-first pipeline, bounded parallelism, and detailed diff reporting when needed.
 
